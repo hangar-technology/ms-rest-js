@@ -200,7 +200,12 @@ export class ServiceClient {
 
       const requestUrl: URLBuilder = URLBuilder.parse(baseUri);
       if (operationSpec.path) {
-        requestUrl.setPath(operationSpec.path);
+        const basePath = requestUrl.getPath();
+        if (basePath) {
+          requestUrl.setPath(`${basePath}/${operationSpec.path}`);
+        } else {
+          requestUrl.setPath(operationSpec.path);
+        }
       }
       if (operationSpec.urlParameters && operationSpec.urlParameters.length > 0) {
         for (const urlParameter of operationSpec.urlParameters) {
